@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TextParser.Core.Interfaces;
@@ -30,6 +32,9 @@ namespace TextParser.Core.Services {
                 logger.Log(LogLevel.Information, result.ToString());
                 await dataService.Save(result);
             }
+
+            //This is naughty just to generate a file
+            File.WriteAllText(@"./OutputFiles/output.json", JsonConvert.SerializeObject(structuredOutputCollection));
             return structuredOutputCollection?.Count() > 0;
         }
     }
