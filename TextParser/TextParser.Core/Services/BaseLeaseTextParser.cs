@@ -6,7 +6,7 @@ using TextParser.Core.Interfaces;
 using TextParser.DAL.Interfaces;
 
 namespace TextParser.Core.Services {
-    public abstract class BaseLeaseTextParser<TLeaseScheduleType, TRawEntryTextType> : ILeaseTextParser where TLeaseScheduleType : class where TRawEntryTextType: class {
+    public abstract class BaseLeaseTextParser<TLeaseScheduleType, TRawEntryTextType> : ILeaseTextParserService where TLeaseScheduleType : class where TRawEntryTextType: class {
         private IRawFileParserService<TRawEntryTextType> fileParser;
         private IEntryTextParserService<TRawEntryTextType, TLeaseScheduleType> entryTextParser;
         private ITextParserDataService<TLeaseScheduleType> dataService;

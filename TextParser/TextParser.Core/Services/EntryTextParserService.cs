@@ -18,9 +18,9 @@ namespace TextParser.Core.Services {
     public class EntryTextParserService : IEntryTextParserService<RawEntryTextOutput, LeaseNoticeSchedule> {
         private const int MAX_CONCURRENT_TASK_COUNT = 10;
         private ICustomLogger logger;
-        private IRowDataParser rowDataParser;
+        private IRowDataParserService rowDataParser;
 
-        public EntryTextParserService(ICustomLogger logger, IRowDataParser rowDataParser) {
+        public EntryTextParserService(ICustomLogger logger, IRowDataParserService rowDataParser) {
             this.rowDataParser = rowDataParser;
             this.logger = logger;
         }
@@ -50,11 +50,11 @@ namespace TextParser.Core.Services {
 
                 return new LeaseNoticeSchedule() {
                     Id = Guid.NewGuid(),
-                    RegistrationDateAndPlan = registrationStringBuilder.ToString(),
-                    PropertyDescription = propDescriptionStringBuilder.ToString(),
-                    DateOfLeaseAndTerm = dateOfLeaseStringBuilder.ToString(),
-                    LesseesTitle = lesseesStringBuilder.ToString(),
-                    Notes = noteStringBuilder.ToString(),
+                    RegistrationDateAndPlan = registrationStringBuilder.ToString().Trim(),
+                    PropertyDescription = propDescriptionStringBuilder.ToString().Trim(),
+                    DateOfLeaseAndTerm = dateOfLeaseStringBuilder.ToString().Trim(),
+                    LesseesTitle = lesseesStringBuilder.ToString().Trim(),
+                    Notes = noteStringBuilder.ToString().Trim(),
                 };
             } else {
                 //We would build on this and give a diagnostic Row ID + details success metrics for troubleshooting

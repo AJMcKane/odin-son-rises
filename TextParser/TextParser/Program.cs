@@ -22,7 +22,7 @@ namespace TextParser {
             try {
                 //TODO: Before calling GetRequiredService we would take in an arg like FileName, inspect our extension and modify our service provider accordingly
                 //We could also flip the app to iterate a directory, instantiate different instances with of ILeaseTextParser with different IRawFileParsers per fileType.
-                var textParsingService = serviceProvider.GetRequiredService<ILeaseTextParser>();
+                var textParsingService = serviceProvider.GetRequiredService<ILeaseTextParserService>();
                 var success = await textParsingService.ParseLeaseText("./InputFiles/InputJson.json");
                 if (success) {
                     logger.Log(LogLevel.Information, "Parsing Complete, please check output database for results.");
@@ -43,10 +43,11 @@ namespace TextParser {
         }
 
         private static void SetupDependencies(HostBuilderContext context, IServiceCollection services) {
-            services.AddScoped<ILeaseTextParser, LeaseNoticeScheduleTextParser>()
+            services.AddScoped<ILeaseTextParserService, LeaseNoticeScheduleTextParser>()
                 .AddScoped<IEntryTextParserService<RawEntryTextOutput, LeaseNoticeSchedule>, EntryTextParserService>()
                 .AddScoped<IRawFileParserService<RawEntryTextOutput>, JsonRawParserService>()
-                .AddScoped<ITextParserDataService<LeaseNoticeSchedule>,TextParserDataService>()
+                .AddScoped<ITextParserDataService<LeaseNoticeSchedule>, TextParserDataService>()
+                .AddScoped<IRowDataParserService, RowDataParserService>()
                 .AddScoped<IRegexHandlerService, RegexHandlerService>()
                 .AddSingleton<IConsoleWriter, ConsoleWriter>()
                 .AddSingleton<ICustomLogger, ConsoleLogger>((srv) => new ConsoleLogger(LogLevel.Debug, srv.GetRequiredService<IConsoleWriter>()));

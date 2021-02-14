@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 namespace TextParser.Core.Interfaces {
-    public interface ILeaseTextParser {
+    public interface ILeaseTextParserService {
         /// <summary>
         /// Parses Input File and stores to Database
         /// </summary>

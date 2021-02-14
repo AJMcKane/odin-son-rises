@@ -8,8 +8,8 @@ using TextParser.Core.Enums;
 using TextParser.Core.Interfaces;
 
 namespace TextParser.Core.Services {
-    public class RowDataParserService : IRowDataParser {
-        private const string NOTE_PREFIX = "Note: ";
+    public class RowDataParserService : IRowDataParserService {
+        private const string NOTE_PREFIX = "Note";
         private const int DOUBLE_COL_SPACE = 28;
         private ICustomLogger logger;
         public RowDataParserService(ICustomLogger logger) {
@@ -41,13 +41,14 @@ namespace TextParser.Core.Services {
 
         private RowState ParseIntermediateRow(MatchCollection columnSpaceMatches, string[] columnText, StringBuilder registrationStringBuilder, StringBuilder propDescriptionStringBuilder, 
             StringBuilder dateOfLeaseStringBuilder, StringBuilder lesseesStringBuilder,  StringBuilder noteStringBuilder, RowState lastRowState, bool rowTextEndsInSpacing) {
-            
-            var doubleColSpacing = columnSpaceMatches.FirstOrDefault()?.Length >= DOUBLE_COL_SPACE;
+            var firstColumnSpaceMatch = columnSpaceMatches.FirstOrDefault();
+            var anySpacing = firstColumnSpaceMatch != null;
+            var doubleColSpacing =firstColumnSpaceMatch?.Length >= DOUBLE_COL_SPACE;
             var thisRowState = RowState.Standard;
             switch (columnText.Length) {
                 case 1:
                     thisRowState = ParseOneColumn(columnText, registrationStringBuilder, dateOfLeaseStringBuilder, 
-                        noteStringBuilder, lastRowState, rowTextEndsInSpacing, doubleColSpacing);
+                        noteStringBuilder, lastRowState, rowTextEndsInSpacing, doubleColSpacing, anySpacing);
                     //var text = columnText[0];
                     //if (text.Contains(NOTE_PREFIX, StringComparison.InvariantCultureIgnoreCase)) {
                     //    TrimAndAppendTrailingSpace(noteStringBuilder, text);
@@ -181,7 +182,9 @@ namespace TextParser.Core.Services {
         }
 
         private RowState ParseOneColumn(string[] columnText, StringBuilder registrationStringBuilder,
-            StringBuilder dateOfLeaseStringBuilder, StringBuilder noteStringBuilder, RowState lastRowState, bool rowTextEndsInSpacing, bool doubleColSpacing) {
+            StringBuilder dateOfLeaseStringBuilder, StringBuilder noteStringBuilder, 
+            RowState lastRowState, bool rowTextEndsInSpacing, 
+            bool doubleColSpacing, bool anySpacing) {
             var text = columnText[0];
             var thisRowState = RowState.Standard;
             if (text.Contains(NOTE_PREFIX, StringComparison.InvariantCultureIgnoreCase)) {
@@ -213,7 +216,7 @@ namespace TextParser.Core.Services {
                     }
                     break;
                 case RowState.TwoElementsRegistrationAndDate:
-                    if (doubleColSpacing) {
+                    if (doubleColSpacing || !anySpacing) {
                         TrimAndAppendTrailingSpace(registrationStringBuilder, text);
                         thisRowState = RowState.OneElementRegistration;
                     } else {
