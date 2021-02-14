@@ -27,9 +27,10 @@ namespace TextParser.Core.Services {
             var entryTextOutput = await fileParser.ParseFile(filePath);            
             var structuredOutputCollection = await entryTextParser.ParseEntryTextCollection(entryTextOutput);
             foreach (var result in structuredOutputCollection) {
+                logger.Log(LogLevel.Information, result.ToString());
                 await dataService.Save(result);
             }
-            throw new NotImplementedException();
+            return structuredOutputCollection?.Count() > 0;
         }
     }
 }

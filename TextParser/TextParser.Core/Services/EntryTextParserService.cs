@@ -31,7 +31,7 @@ namespace TextParser.Core.Services {
         }
 
         public async Task<LeaseNoticeSchedule> ParseEntryText(RawEntryTextOutput item) {
-            if (item.EntryText.Count() > 1) {
+            if (item.EntryText.Count() > 0) {
                 StringBuilder registrationStringBuilder = new StringBuilder(), propDescriptionStringBuilder = new StringBuilder(),
                 dateOfLeaseStringBuilder = new StringBuilder(), lesseesStringBuilder = new StringBuilder(), noteStringBuilder = new StringBuilder();
                 var entryTextArray = item.EntryText.Where(p => !string.IsNullOrWhiteSpace(p))

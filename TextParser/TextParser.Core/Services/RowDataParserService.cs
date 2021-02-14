@@ -169,10 +169,6 @@ namespace TextParser.Core.Services {
                     }
                     break;
                 case 4:
-                    //TrimAndAppendTrailingSpace(registrationStringBuilder, columnText[0]);
-                    //TrimAndAppendTrailingSpace(propDescriptionStringBuilder, columnText[1]);
-                    //TrimAndAppendTrailingSpace(dateOfLeaseStringBuilder, columnText[2]);
-                    //TrimAndAppendTrailingSpace(lesseesStringBuilder, columnText[3]);
                     ParseFourColumns(columnText, registrationStringBuilder, propDescriptionStringBuilder, dateOfLeaseStringBuilder, lesseesStringBuilder);
                     break;
                 default:
@@ -221,7 +217,7 @@ namespace TextParser.Core.Services {
                         thisRowState = RowState.OneElementRegistration;
                     } else {
                         TrimAndAppendTrailingSpace(dateOfLeaseStringBuilder, text);
-                        thisRowState = RowState.OneElementRegistration;
+                        thisRowState = RowState.OneElementDateLease;
                     }
                     break;
                 case RowState.TwoElementsPropertyAndDate:
